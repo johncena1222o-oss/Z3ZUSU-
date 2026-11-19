@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Z3ZUSU | The Unknown</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Share+Tech+Mono&display=swap');
+
+*{box-sizing:border-box}
+body{
+ margin:0;background:#050505;color:#ddd;
+ font-family:'Share Tech Mono',monospace;
+ min-height:100vh;
+}
+header{text-align:center;padding:45px 15px 25px}
+h1{
+ font-family:'Creepster',cursive;
+ font-size:clamp(65px,13vw,110px);
+ color:#b00025;letter-spacing:9px;
+ text-shadow:0 0 15px #c00030,0 0 40px #650018;
+ margin:0;
+}
+header p{letter-spacing:5px;color:#777}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;padding:15px}
+button{
+ background:#10090c;color:#ddd;border:1px solid #79152c;
+ padding:12px 18px;font-family:inherit;cursor:pointer;
+ transition:.2s;
+}
+button:hover{background:#80152d;box-shadow:0 0 15px #a00030}
+main{max-width:850px;margin:auto;padding:20px}
+.panel{
+ background:linear-gradient(140deg,#151013,#080808);
+ border:1px solid #501020;padding:25px;margin:15px 0;
+ box-shadow:0 0 20px #210711;
+}
+h2{color:#c02a48}
+.page{display:none}
+.page.active{display:block;animation:fade .4s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.door{
+ display:inline-flex;width:145px;height:190px;
+ margin:10px;background:#170e11;border:2px solid #722438;
+ align-items:center;justify-content:center;flex-direction:column;
+ cursor:pointer;color:#ddd;
+}
+.door:hover{background:#3b101d;box-shadow:0 0 20px #a00030}
+.door span{font-size:40px;margin-bottom:15px}
+input{
+ background:#050505;border:1px solid #8a1b35;
+ color:white;padding:13px;font-family:inherit;
+ max-width:300px;width:100%;margin:12px 0;
+}
+#result{color:#e34b62;min-height:25px}
+footer{text-align:center;color:#555;padding:30px;font-size:12px}
+.small{color:#777;font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Z3ZUSU</h1>
+<p>WELCOME TO THE UNKNOWN</p>
+</header>
+
+<nav>
+<button onclick="page('home')">START</button>
+<button onclick="page('rooms')">RÄUME</button>
+<button onclick="page('diary')">TAGEBUCH</button>
+<button onclick="page('puzzle')">RÄTSEL</button>
+<button onclick="flash()">🔦 LICHT</button>
+</nav>
+
+<main>
+
+<section id="home" class="page active">
+<div class="panel">
+<h2>Du bist angekommen.</h2>
+<p>Niemand weiß, wie du diesen Ort gefunden hast.</p>
+<p>Die Fenster sind dunkel. Die Türen stehen offen.</p>
+<p>Aber irgendetwas stimmt hier nicht.</p>
+<button onclick="page('rooms')">HAUS BETRETEN →</button>
+</div>
+
+<div class="panel">
+<h2>Eine Nachricht ...</h2>
+<p id="random">Es ist ungewöhnlich still.</p>
+<button onclick="randomMessage()">NEUE NACHRICHT</button>
+</div>
+</section>
+
+<section id="rooms" class="page">
+<div class="panel">
+<h2>Wähle eine Tür</h2>
+<div class="door" onclick="room(0)"><span>🚪</span>KELLER</div>
+<div class="door" onclick="room(1)"><span>🪞</span>SPIEGELZIMMER</div>
+<div class="door" onclick="room(2)"><span>📚</span>BIBLIOTHEK</div>
+<div class="panel" id="roomText">Du stehst vor drei Türen.</div>
+</div>
+</section>
+
+<section id="diary" class="page">
+<div class="panel">
+<h2>Das Tagebuch</h2>
+<p>12. Oktober: Heute habe ich ein Geräusch gehört.</p>
+<p>13. Oktober: Die Tür war plötzlich offen.</p>
+<p>14. Oktober: Im Spiegel stand eine Zahl.</p>
+<p>15. Oktober: Ich darf sie nicht vergessen.</p>
+<hr>
+<p>Auf der letzten Seite steht: <strong>1313</strong></p>
+</div>
+</section>
+
+<section id="puzzle" class="page">
+<div class="panel">
+<h2>Das geheime Schloss</h2>
+<p>Gib den vierstelligen Code ein.</p>
+<p class="small">Tipp: Lies das Tagebuch.</p>
+<input id="code" maxlength="4" placeholder="CODE">
+<br>
+<button onclick="unlock()">ÖFFNEN</button>
+<p id="result"></p>
+</div>
+</section>
+
+<section id="secret" class="page">
+<div class="panel">
+<h2>GEHEIMES ARCHIV</h2>
+<p>Du hast das erste Geheimnis entdeckt.</p>
+<p>Doch Z3ZUSU hat noch mehr zu verbergen.</p>
+<button onclick="page('home')">ZURÜCK</button>
+</div>
+</section>
+
+</main>
+
+<footer>Z3ZUSU © 2026 | NOTHING IS AS IT SEEMS</footer>
+
+<script>
+function page(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ window.scrollTo(0,0);
+}
+
+function randomMessage(){
+ const messages=[
+ "Du bist nicht allein.",
+ "Hast du gerade etwas gehört?",
+ "Die Tür war eben noch geschlossen.",
+ "Jemand kennt deinen Namen.",
+ "Schau dich noch einmal um.",
+ "Das Haus vergisst niemanden."
+ ];
+ document.getElementById('random').textContent=
+ messages[Math.floor(Math.random()*messages.length)];
+}
+
+function room(n){
+ const texts=[
+ "KELLER: Eine alte Uhr steht mitten im Raum. Sie zeigt immer 03:13.",
+ "SPIEGELZIMMER: Der Spiegel ist beschlagen. Darauf steht: VERTRAUE NICHT JEDEM.",
+ "BIBLIOTHEK: Ein altes Tagebuch liegt offen auf dem Tisch."
+ ];
+ document.getElementById('roomText').textContent=texts[n];
+}
+
+function unlock(){
+ const value=document.getElementById('code').value;
+ if(value==="1313"){
+  document.getElementById('result').textContent="ZUGANG GEWÄHRT!";
+  setTimeout(()=>page('secret'),700);
+ }else{
+  document.getElementById('result').textContent="FALSCH. VERSUCHE ES NOCH EINMAL.";
+ }
+}
+
+let light=false;
+function flash(){
+ light=!light;
+ document.body.style.background=light?'#242024':'#050505';
+}
+</script>
+</body>
+</html>
